@@ -1,0 +1,5 @@
+# Create a config/odata.yml file based on this sample file
+test:
+  data_url: 'https://mycompany.com/TEST/api/data/v8.0/'
+  username: test_username
+  password: test_user_password
