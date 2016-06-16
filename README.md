@@ -55,7 +55,7 @@ contact.destroy
 ### Microsoft CRM Tables
 Some of the Microsoft CRM core tables are added to this gem. If you have your own tables you want to add, you will need to create your own model classes.
 
-In your projects **app/models** folder create a new folder called **crm**. In the **crm** folder create a new class model, for example
+In your projects **app/models** folder create a new folder called **crm**. In the **crm** folder create a new class model, for example (*app/models/crm/invoice.rb*)
 
 ```
 module Crm
@@ -116,6 +116,87 @@ bundle exec rspec spec
 Unit tests will create, update and destroy records in the **test** database as defined in the database.yml file. It will not drop or truncate table.
 
 ## How it works
-In the *active_record_extension.rb* file it over writes Active Record persistence functions to use OData. When using this gem it will appear to be like a typical rails adapter.
+In the *lib/active_record_extension.rb* file it over writes Active Record persistence functions to use OData. When using this gem it will appear to be like a typical rails adapter.
 
-This gem has only been tested with the Microsoft CRM 2016.
+This gem has only been tested with the **Microsoft CRM 2016**.
+
+## Adapting to your own Company
+Its most likely there will be tables that you created in Microsoft CRM for your own company. To use these custom tables it is recommended that you create your own gem for your company that builds on this gem. Here are the recommended steps to do this:
+
+* Create a rails engine gem with **full** flag
+
+```
+$ rails plugin new activerecord_sqlserver_mycompany --full
+```
+
+* Add this gem to gemspec file and bundle install
+
+```
+  s.add_dependency "activerecord_sqlserver_crm"
+```
+
+* Under the **app/models** folder create a **crm** folder
+* Create your new models in the **app/models/crm** folder
+* Alter existing models in this gem with concerns.
+* Create an initializer file **config/initializers/extensions.rb**
+
+```ruby
+Dir[File.join(File.expand_path("../..",__dir__),"app/models/concerns/*.rb")].each {|file| require file }
+```
+
+* Under the **app/models** folder create a **concerns** folder
+* Create your altered models like this (*app/models/concerns/account_ext.rb*):
+
+```ruby
+module AccountExt
+  extend ActiveSupport::Concern
+
+  included do
+    has_many :widgets, foreign_key: 'AccountId'
+  end
+
+  def testa
+    puts "testa"
+  end
+
+  module ClassMethods
+    def testb
+      puts "testb"
+    end
+
+  end
+end
+
+# Add new code into Account model
+Crm::Account.send(:include, AccountExt)
+```
+
+Under models/crm add your custom table (*app/models/crm/widget.rb*):
+
+```ruby
+module Crm
+  class Widget < ActiveRecord::Base
+    self.table_name = "new_Widget"
+    self.primary_key = "new_WidgetId"
+
+    belongs_to :account, foreign_key: 'new_WidgetId', crm_key: 'new_WidgetId'
+
+  end
+end
+```
+
+You should be able to see widgets under accounts like this
+
+```ruby
+account = Crm::Account.last
+account.widgets.count
+account.testa
+
+Crm::Account.testb
+```
+
+Now in your company projects you include this company gem (activerecord_sqlserver_mycompany) in your Gemfile.
+
+## Help needed
+
+I have only added a handful of models from Microsoft CRM into this gem. Its a mammoth task to add all CRM models, relationships, validations into this gem. If you use this gem and add additional common models, please send me a pull request to include in this gem.
