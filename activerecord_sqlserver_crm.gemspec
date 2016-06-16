@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = ActiverecordSqlserverCrm::VERSION
   s.authors     = ["Rolf Lawrenz"]
   s.email       = ["rolf.lawrenz@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/RolfLawrenz/activerecord_sqlserver_crm"
   s.summary     = "A rails engine that uses ActiveRecord SQL Server to read from CRM SQL Server, and OData to write to CRM."
   s.description = "A rails engine that uses ActiveRecord SQL Server to read from CRM SQL Server, and OData to write to CRM."
   s.license     = "MIT"
