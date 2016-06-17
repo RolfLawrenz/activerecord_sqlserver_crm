@@ -8,3 +8,4 @@ spec/dummy/config/odata.yml
 spec/dummy/log
 spec/dummy/tmp
 .DS_Store
+*.gem

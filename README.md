@@ -17,13 +17,13 @@ Run the bundle command to install it
 ## Reading records
 Because it is based on the rails framework you have all the activerecord goodness. All models are under the **Crm** namespace. To read a Contact in the Microsoft CRM database:
 
-```
+```ruby
 Crm::Contact.where(ContactId: 'AAAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE').first
 ```
 
 Number of records in Contact table:
 
-```
+```ruby
 Crm::Contact.count
 ```
 
@@ -34,20 +34,20 @@ Create, Update, Delete will use the OData interface rather than direct. Directly
 
 Create a new record with
 
-```
+```ruby
 contact = Crm::Contact.new(FirstName: 'Test', LastName: "Testerson")
 contact.save
 ```
 
 Update a record with
 
-```
+```ruby
 contact.update(FirstName: 'John')
 contact.save
 ```
 
 Delete a record with
-```
+```ruby
 contact.destroy
 ```
 
@@ -57,7 +57,7 @@ Some of the Microsoft CRM core tables are added to this gem. If you have your ow
 
 In your projects **app/models** folder create a new folder called **crm**. In the **crm** folder create a new class model, for example (*app/models/crm/invoice.rb*)
 
-```
+```ruby
 module Crm
   class Invoice < ActiveRecord::Base
     # Names must match exactly what is in CRM database
@@ -80,7 +80,7 @@ The OData metadata can be found in your CRM site here **https://mycompany.com/TE
 ### Associations 
 Associations can be referenced as usual in activerecord. For example:
 
-```
+```ruby
 contact = Crm::Contact.where(ContactId: '<crm_guid>').first
 invoices = contact.invoices
 ```
@@ -88,7 +88,7 @@ invoices = contact.invoices
 When adding your own models, make sure you add these associations using the typical activerecord **has_many**, **belongs_to** methods. There is an extra field included in the **belongs_to** method called **crm_key**. The **crm_key** is used only for OData calls. Sometimes the foreign_key stored in the table is different than the whats used in OData. 
 To find the foreign_key field, look in the database table. To find the crm_key, look in the OData metadata Entity. It is case sensitive. The crm_key will look something like this in the metadata (customerid_contact):
  
-```
+```xml
 <EntityType Name="invoice" BaseType="mscrm.crmbaseentity">
 
   <NavigationProperty Name="customerid_contact" Type="mscrm.contact" Nullable="false" Partner="invoice_customer_contacts">
@@ -131,7 +131,7 @@ $ rails plugin new activerecord_sqlserver_mycompany --full
 
 * Add this gem to gemspec file and bundle install
 
-```
+```ruby
   s.add_dependency "activerecord_sqlserver_crm"
 ```
 
