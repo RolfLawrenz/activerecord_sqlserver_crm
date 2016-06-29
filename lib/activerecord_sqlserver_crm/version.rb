@@ -1,3 +1,3 @@
 module ActiverecordSqlserverCrm
-  VERSION = "0.0.2"
+  VERSION = "4.2.1"
 end
