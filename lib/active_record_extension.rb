@@ -57,6 +57,11 @@ module ActiveRecordExtension
     save
   end
 
+  # If odata referes to table differently than table name when using  associations, you can use this method
+  def odata_table_reference
+    nil
+  end
+
   # add your static(class) methods here
   module ClassMethods
     def belongs_to_field?(field)
