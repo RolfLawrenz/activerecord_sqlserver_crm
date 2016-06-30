@@ -26,7 +26,7 @@ module OData
     end
 
     def entity_name
-      "#{@ar.class.table_name.downcase}s"
+      table_pluralize(@ar.class.table_name).downcase
     end
 
     def handle_operation_response(response)
@@ -62,6 +62,10 @@ module OData
 
     def operation_username
       ODATA_CONFIG[Rails.env]['username']
+    end
+
+    def table_pluralize(name)
+      name.end_with?('s') ? "#{name}es" : name.pluralize
     end
 
     def run

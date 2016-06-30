@@ -20,7 +20,7 @@ module OData
         # If a belongs to field, add association the way OData wants it
         if @ar.class.belongs_to_field?(field)
           belongs_to_field = @ar.class.belongs_to_field(field)
-          odata_table_ref = @ar.odata_table_reference || belongs_to_field.table_name.pluralize.downcase
+          odata_table_ref = @ar.class.odata_table_reference || table_pluralize(belongs_to_field.table_name).downcase
           body["#{belongs_to_field.options[:crm_key]}@odata.bind"] = "/#{odata_table_ref}(#{values[1]})"
         else
           body[field.downcase] = values[1]

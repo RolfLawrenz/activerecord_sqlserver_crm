@@ -57,11 +57,6 @@ module ActiveRecordExtension
     save
   end
 
-  # If odata referes to table differently than table name when using  associations, you can use this method
-  def odata_table_reference
-    nil
-  end
-
   # add your static(class) methods here
   module ClassMethods
     def belongs_to_field?(field)
@@ -77,6 +72,15 @@ module ActiveRecordExtension
     def belongs_to_fields
       associations = reflect_on_all_associations
       associations.select { |a| a.macro == :belongs_to }
+    end
+
+    # If odata referes to table differently than table name when using  associations, you can use this method
+    def odata_table_reference
+      @odata_table_reference
+    end
+
+    def odata_table_reference=(value)
+      @odata_table_reference = value
     end
   end
 end
