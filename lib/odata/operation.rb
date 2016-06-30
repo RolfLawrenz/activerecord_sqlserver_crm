@@ -74,6 +74,9 @@ module OData
     end
 
     def send_odata
+      puts "SEND ODATA"
+      puts "URL: #{operation_url}"
+      puts "BODY: #{operation_body}"
       @ar.run_callbacks operation_callback_name do
         request = ::Typhoeus::Request.new(
             operation_url,

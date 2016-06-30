@@ -23,6 +23,7 @@ module OData
           odata_table_ref = @ar.class.odata_table_reference || table_pluralize(belongs_to_field.table_name).downcase
           body["#{belongs_to_field.options[:crm_key]}@odata.bind"] = "/#{odata_table_ref}(#{values[1]})"
         else
+          puts "----> body[#{field.downcase}]=#{values[1]} class=#{values[1].class.name}"
           body[field.downcase] = values[1]
         end
       end
