@@ -197,6 +197,48 @@ Crm::Account.testb
 
 Now in your company projects you include this company gem (activerecord_sqlserver_mycompany) in your Gemfile.
 
+### Many to Many relationships
+
+Here is an example of a many to many relationship
+
+The Many to Many table (WidgetThing)
+
+```ruby
+module Crm
+  class WidgetThing < ActiveRecord::Base
+    self.table_name = "new_WidgetThing"
+    self.primary_key = "new_WidgetThingId"
+
+    belongs_to :widget, foreign_key: 'new_widgetId', crm_key: 'new_widgetid'
+    belongs_to :thing, foreign_key: 'new_thingId', crm_key: 'new_thingid'
+  end
+end
+```
+
+The One to Many Tables
+
+```ruby
+module Crm
+  class Widget < ActiveRecord::Base
+    self.table_name = "new_Widget"
+    self.primary_key = "new_WidgetId"
+
+    has_many :widget_things, foreign_key: 'new_widgetId'
+    has_many :things, through: :widget_things, foreign_key: "new_widgetId", class_name: "Crm::WidgetThing"
+  end
+end
+
+module Crm
+  class Thing < ActiveRecord::Base
+    self.table_name = "new_Thing"
+    self.primary_key = "new_ThingId"
+
+    has_many :widget_things, foreign_key: 'new_thingId'
+    has_many :widgets, through: :widget_things, foreign_key: "new_thingId", class_name: "Crm::WidgetThing"
+  end
+end
+```
+
 ## Help needed
 
 I have only added a handful of models from Microsoft CRM into this gem. Its a mammoth task to add all CRM models, relationships, validations into this gem. If you use this gem and add additional common models, please send me a pull request to include in this gem.
