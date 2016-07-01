@@ -1,3 +1,11 @@
-= ActiverecordSqlserverCrm
+= ActiverecordSqlserverCrm Developer Guide:
 
-This project rocks and uses MIT-LICENSE.
+== Building gem
+
+gem build activerecord_sqlserver_crm.gemspec
+
+== Publishing gem
+
+gem push activerecord_sqlserver_crm-0.0.1.gem
+
+
