@@ -7,6 +7,10 @@ module Crm
 
     has_many :invoices, foreign_key: 'PriceLevelId'
     has_many :price_list_items, foreign_key: 'PriceLevelId'
+    has_many :products, foreign_key: 'PriceLevelId'
+
+    validates :Name, presence: true
+    validates :currency, presence: true
 
   end
 end

@@ -8,5 +8,15 @@ module Crm
 
     has_many :notes, foreign_key: 'ObjectId'
 
+    validates :Title, presence: true
+    validate :contact_xor_account
+
+    private
+
+    def contact_xor_account
+      unless contact.blank? ^ account.blank?
+        errors.add(:base, "Specify a contact or account, not both")
+      end
+    end
   end
 end

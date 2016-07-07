@@ -6,5 +6,7 @@ module Crm
     has_many :notes, foreign_key: 'ObjectId'
     has_many :cases, foreign_key: 'AccountId'
 
+    validates :Name, presence: true
+
   end
 end

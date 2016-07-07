@@ -11,5 +11,19 @@ module Crm
     has_many :invoice_products, foreign_key: 'InvoiceId'
     has_many :notes, foreign_key: 'ObjectId'
 
+    validates :Name, presence: true
+    validates :InvoiceNumber, presence: true
+    validates :price_list, presence: true
+
+    validate :contact_xor_account
+
+    private
+
+    def contact_xor_account
+      unless contact.blank? ^ account.blank?
+        errors.add(:base, "Specify a contact or account, not both")
+      end
+    end
+
   end
 end

@@ -5,5 +5,8 @@ module Crm
 
     has_many :notes, foreign_key: 'ObjectId'
 
+    validates :FirstName, presence: true
+    validates :LastName, presence: true
+
   end
 end

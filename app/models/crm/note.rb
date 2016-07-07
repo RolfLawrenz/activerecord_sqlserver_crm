@@ -10,5 +10,7 @@ module Crm
     belongs_to :contact, foreign_key: 'OwnerId', crm_key: 'Contact_Annotation'
     belongs_to :invoice, foreign_key: 'OwnerId', crm_key: 'Invoice_Annotation'
 
+    validates :Subject, presence: true
+
   end
 end
