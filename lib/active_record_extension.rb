@@ -74,13 +74,24 @@ module ActiveRecordExtension
       associations.select { |a| a.macro == :belongs_to }
     end
 
-    # If odata referes to table differently than table name when using  associations, you can use this method
+    # If odata refers to table differently than table name when using associations, you can use this method
     def odata_table_reference
       @odata_table_reference
     end
 
     def odata_table_reference=(value)
       @odata_table_reference = value
+    end
+
+    # In some cases the odata field name is different than the database field name. This method is used for this mapping
+    def odata_field(field, options)
+      @odata_property_key ||= {}
+      @odata_property_key[field] = options[:crm_key]
+    end
+
+    def odata_field_value(crm_key)
+      @odata_property_key ||= {}
+      @odata_property_key[crm_key]
     end
   end
 end

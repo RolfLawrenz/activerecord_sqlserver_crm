@@ -23,7 +23,8 @@ module OData
           odata_table_ref = @ar.class.odata_table_reference || table_pluralize(belongs_to_field.table_name).downcase
           body["#{belongs_to_field.options[:crm_key]}@odata.bind"] = "/#{odata_table_ref}(#{values[1]})"
         else
-          body[field.downcase] = values[1]
+          key = @ar.class.odata_field_value(field.to_sym) || field.downcase
+          body[key] = values[1]
         end
       end
       body.to_json
