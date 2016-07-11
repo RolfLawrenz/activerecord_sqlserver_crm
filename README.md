@@ -239,6 +239,34 @@ module Crm
 end
 ```
 
+## OData differences
+In some rare cases Microsoft CRM names fields differently in OData than in database. If you this occurs for you, you can use the **odata_field** method. For example
+
+```ruby
+module Crm
+  class Tag < ActiveRecord::Base
+    self.table_name = "new_tag"
+    self.primary_key = "new_tagId"
+
+    # Field is same name as table. Database uses "new_tag", OData uses "new_tag1"
+    odata_field :new_tag, crm_key: 'new_tag1'
+
+    validates :new_tag, presence: true
+  end
+end
+```
+
+If OData calls then table name differently than the Database you can use the **odata_table_reference** method:
+```ruby
+module Crm
+  class Tag < ActiveRecord::Base
+    self.table_name = "new_tag"
+    self.primary_key = "new_tagId"
+    odata_table_reference = "odata_new_tag"
+  end
+end
+```
+
 ## Help needed
 
 I have only added a handful of models from Microsoft CRM into this gem. Its a mammoth task to add all CRM models, relationships, validations into this gem. If you use this gem and add additional common models, please send me a pull request to include in this gem.
