@@ -267,6 +267,22 @@ module Crm
 end
 ```
 
+## Failover Database
+The library now supports fail over using a secondary database. If active record cannot connect to the primary database, it will switch
+to using the secondary. After every 5 minutes it will retry to connect to the master database. To use this feature add **slaves** to your **database.yml** file:
+
+```ruby
+development:
+  adapter: sqlserver
+  host: master.db.int
+  port: 1433
+  database: CompanyDatabase
+  username: user
+  password: pass
+  slaves:
+    - host: slave.db.int
+```
+
 ## Help needed
 
 I have only added a handful of models from Microsoft CRM into this gem. Its a mammoth task to add all CRM models, relationships, validations into this gem. If you use this gem and add additional common models, please send me a pull request to include in this gem.

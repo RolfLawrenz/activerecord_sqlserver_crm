@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    activerecord_sqlserver_crm (4.2.3)
+    activerecord_sqlserver_crm (4.2.4)
       activerecord-sqlserver-adapter (~> 4.2, >= 4.2.13)
       rails (~> 4.2, >= 4.2.6)
       tiny_tds (~> 0.7.0)
@@ -55,7 +55,7 @@ GEM
     erubis (2.7.0)
     ethon (0.9.0)
       ffi (>= 1.3.0)
-    ffi (1.9.10)
+    ffi (1.9.13)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
@@ -117,7 +117,7 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
-    sprockets (3.6.2)
+    sprockets (3.6.3)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (3.1.1)
