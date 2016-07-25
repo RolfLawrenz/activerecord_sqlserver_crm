@@ -224,7 +224,7 @@ module Crm
     self.primary_key = "new_WidgetId"
 
     has_many :widget_things, foreign_key: 'new_widgetId'
-    has_many :things, through: :widget_things, foreign_key: "new_widgetId", class_name: "Crm::WidgetThing"
+    has_many :things, through: :widget_things, foreign_key: "new_widgetId"
   end
 end
 
@@ -234,7 +234,7 @@ module Crm
     self.primary_key = "new_ThingId"
 
     has_many :widget_things, foreign_key: 'new_thingId'
-    has_many :widgets, through: :widget_things, foreign_key: "new_thingId", class_name: "Crm::WidgetThing"
+    has_many :widgets, through: :widget_things, foreign_key: "new_thingId"
   end
 end
 ```

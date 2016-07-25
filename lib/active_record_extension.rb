@@ -69,6 +69,11 @@ module ActiveRecordExtension
       @belongs_to_fields.select{|f| f.foreign_key == field}.first
     end
 
+    def belongs_to_field_by_name(name)
+      @belongs_to_fields ||= belongs_to_fields
+      @belongs_to_fields.select{|f| f.name.to_s == name}.first
+    end
+
     def belongs_to_fields
       associations = reflect_on_all_associations
       associations.select { |a| a.macro == :belongs_to }
@@ -81,6 +86,17 @@ module ActiveRecordExtension
 
     def odata_table_reference=(value)
       @odata_table_reference = value
+    end
+
+    # OData does not allow creating an entry for a table that is used in a many to many joining table. You must
+    # associate tables together. If a table uses this field, it indicates its a joining many to many table.
+    # An array of the 2 associated tables, eg [Table1, Table2]
+    def many_to_many_associated_tables
+      @many_to_many_associated_tables
+    end
+
+    def many_to_many_associated_tables=(value)
+      @many_to_many_associated_tables = value
     end
 
     # In some cases the odata field name is different than the database field name. This method is used for this mapping

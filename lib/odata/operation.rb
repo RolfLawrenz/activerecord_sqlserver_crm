@@ -26,11 +26,35 @@ module OData
     end
 
     def entity_name
-      table_pluralize(@ar.class.table_name).downcase
+      @ar.class.odata_table_reference || table_pluralize(@ar.class.table_name).downcase
     end
 
     def handle_operation_response(response)
       raise NotImplementedError
+    end
+
+    def many_to_many_table?
+      @ar.class.many_to_many_associated_tables.present?
+    end
+
+    def many_to_many_entity_name(index)
+      @ar.class.many_to_many_associated_tables[index].odata_table_reference || table_pluralize(@ar.class.many_to_many_associated_tables[index].table_name).downcase
+    end
+
+    def many_to_many_class_name(index)
+      @ar.class.many_to_many_associated_tables[index].name.demodulize.underscore
+    end
+
+    def many_to_many_entity_id(index)
+      @ar.send(many_to_many_class_name(index)).id
+    end
+
+    def many_to_many_foreign_key(index)
+      @ar.class.belongs_to_field_by_name(many_to_many_class_name(index)).foreign_key
+    end
+
+    def many_to_many_table_name
+      @ar.class.odata_table_reference || @ar.class.table_name.downcase
     end
 
     def operation_body
@@ -44,7 +68,9 @@ module OData
     def operation_headers
       {
           'Accept' => 'application/json',
-          'Content-Type' => 'application/json; charset=utf-8'
+          'Content-Type' => 'application/json; charset=utf-8',
+          'OData-MaxVersion' => '4.0',
+          'OData-Version' => '4.0'
       }
     end
 
@@ -73,9 +99,13 @@ module OData
       handle_operation_response(response)
     end
 
+    def saved_many_to_many_id
+      @ar.class.where("#{many_to_many_foreign_key(0)} = '#{many_to_many_entity_id(0)}' AND #{many_to_many_foreign_key(1)} = '#{many_to_many_entity_id(1)}'").first.id
+    end
+
     def send_odata
       @ar.run_callbacks operation_callback_name do
-        if Rails.env.development?
+        if Rails.env.development? || Rails.env.test?
           Rails.logger.debug "SEND_ODATA URL: #{operation_url}"
           Rails.logger.debug "SEND_ODATA METHOD: #{operation_method}"
           Rails.logger.debug "SEND_ODATA BODY: #{operation_body}"
