@@ -237,6 +237,17 @@ module Crm
     has_many :widgets, through: :widget_things, foreign_key: "new_thingId"
   end
 end
+
+module Crm
+  class WidgetThing < ActiveRecord::Base
+    self.table_name = "new_WidgetThing"
+    self.primary_key = "new_WidgetThingId"
+    self.many_to_many_associated_tables = [Crm::Widget, Crm::Thing]
+
+    belongs_to :widget, foreign_key: 'new_widgetId', crm_key: 'new_widgetid'
+    belongs_to :thing, foreign_key: 'new_thingId', crm_key: 'new_thingid'
+  end
+end
 ```
 
 ## OData differences
