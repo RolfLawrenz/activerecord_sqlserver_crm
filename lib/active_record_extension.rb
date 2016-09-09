@@ -112,7 +112,7 @@ module ActiveRecordExtension
   end
 end
 
-# include the extension 
+# include the extension
 ActiveRecord::Base.send(:include, ActiveRecordExtension)
 
 # Extend belongs_to for crm_key field

@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_runtime_dependency 'rails', '~> 4.2', '>= 4.2.6'
-  s.add_runtime_dependency 'activerecord-sqlserver-adapter', '~> 4.2', '>= 4.2.13'
-  s.add_dependency "tiny_tds", '~> 0.7.0'
+  s.add_runtime_dependency 'activerecord-sqlserver-adapter', '~> 4.2', '>= 4.2.15'
+  s.add_dependency "tiny_tds", '~> 1.0.4'
   s.add_dependency 'typhoeus', '~> 1.1.0'
 
   s.add_development_dependency 'rspec-rails', '~> 3.4'
