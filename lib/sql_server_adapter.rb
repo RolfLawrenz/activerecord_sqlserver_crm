@@ -57,7 +57,7 @@ module ActiveRecord
       end
 
       def change_active_host
-        slave_host = @connection_options[:slaves][0]['host']
+        slave_host = @connection_options[:slaves][0]['host'] if @connection_options[:slaves]
         return unless slave_host
         if using_master?
           self.active_host = slave_host

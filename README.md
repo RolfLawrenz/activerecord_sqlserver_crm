@@ -294,6 +294,15 @@ development:
     - host: slave.db.int
 ```
 
+## OData
+You can switch OData writing off for your environment by setting the **odata_enabled** flag to false in your odata.yml file. For example:
+
+```ruby
+test:
+  <<: *development
+  odata_enabled: false
+```
+
 ## Help needed
 
 I have only added a handful of models from Microsoft CRM into this gem. Its a mammoth task to add all CRM models, relationships, validations into this gem. If you use this gem and add additional common models, please send me a pull request to include in this gem.

@@ -112,16 +112,19 @@ module ActiveRecordExtension
   end
 end
 
-# include the extension
-ActiveRecord::Base.send(:include, ActiveRecordExtension)
+# You can switch OData off by setting param: 'odata_enabled' to false
+unless ODATA_CONFIG[Rails.env]['odata_enabled'] == false
+  # include the extension
+  ActiveRecord::Base.send(:include, ActiveRecordExtension)
 
-# Extend belongs_to for crm_key field
-module BelongsToActiveRecordExtension
-  def valid_options
-    super + [:crm_key]
+  # Extend belongs_to for crm_key field
+  module BelongsToActiveRecordExtension
+    def valid_options
+      super + [:crm_key]
+    end
   end
-end
 
-class ActiveRecord::Associations::Builder::BelongsTo
-  include ::BelongsToActiveRecordExtension
+  class ActiveRecord::Associations::Builder::BelongsTo
+    include ::BelongsToActiveRecordExtension
+  end
 end
