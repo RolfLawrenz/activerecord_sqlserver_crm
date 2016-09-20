@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    activerecord_sqlserver_crm (4.2.10)
+    activerecord_sqlserver_crm (4.2.11)
       activerecord-sqlserver-adapter (~> 4.2, >= 4.2.15)
       rails (~> 4.2, >= 4.2.6)
       tiny_tds (~> 1.0.4)
