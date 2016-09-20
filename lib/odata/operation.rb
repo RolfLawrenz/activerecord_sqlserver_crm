@@ -10,7 +10,7 @@ module OData
     end
 
     def base_url
-      ODATA_CONFIG[Rails.env]['data_url']
+      OdataConfig.odata_config[Rails.env]['data_url']
     end
 
     def check_response_errors(response)
@@ -79,7 +79,7 @@ module OData
     end
 
     def operation_password
-      ODATA_CONFIG[Rails.env]['password']
+      OdataConfig.odata_config[Rails.env]['password']
     end
 
     def operation_url
@@ -87,7 +87,7 @@ module OData
     end
 
     def operation_username
-      ODATA_CONFIG[Rails.env]['username']
+      OdataConfig.odata_config[Rails.env]['username']
     end
 
     def table_pluralize(name)

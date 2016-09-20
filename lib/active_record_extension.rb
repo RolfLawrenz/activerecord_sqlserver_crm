@@ -1,4 +1,5 @@
 require 'odata/model'
+require 'odata_config'
 
 module ActiveRecordExtension
 
@@ -112,12 +113,8 @@ module ActiveRecordExtension
   end
 end
 
-def odata_config
-  @odata_config ||= YAML.load_file(Rails.root.join('config', 'odata.yml'))
-end
-
 # You can switch OData off by setting param: 'odata_enabled' to false
-unless odata_config[Rails.env]['odata_enabled'] == false
+unless OdataConfig.odata_config[Rails.env]['odata_enabled'] == false
   # include the extension
   ActiveRecord::Base.send(:include, ActiveRecordExtension)
 
