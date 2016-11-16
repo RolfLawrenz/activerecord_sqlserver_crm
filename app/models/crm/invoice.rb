@@ -12,7 +12,6 @@ module Crm
     has_many :notes, foreign_key: 'ObjectId'
 
     validates :Name, presence: true
-    validates :InvoiceNumber, presence: true
     validates :price_list, presence: true
 
     validate :contact_xor_account
