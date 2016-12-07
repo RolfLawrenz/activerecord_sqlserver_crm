@@ -9,6 +9,7 @@ module Crm
     belongs_to :case, foreign_key: 'ObjectId', crm_key: 'objectid_case'
     belongs_to :contact, foreign_key: 'ObjectId', crm_key: 'objectid_contact'
     belongs_to :invoice, foreign_key: 'ObjectId', crm_key: 'objectid_invoice'
+    belongs_to :opportunity, foreign_key: 'ObjectId', crm_key: 'objectid_opportunity'
 
     validates :Subject, presence: true
 

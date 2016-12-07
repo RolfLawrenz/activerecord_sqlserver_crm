@@ -5,6 +5,7 @@ module Crm
 
     belongs_to :account, foreign_key: 'AccountId', crm_key: 'customerid_account'
     belongs_to :contact, foreign_key: 'ContactId', crm_key: 'customerid_contact'
+    belongs_to :opportunity, foreign_key: 'OpportunityId', crm_key: 'opportunityid'
     belongs_to :price_list, foreign_key: 'PriceLevelId', crm_key: 'pricelevelid'
     belongs_to :currency, foreign_key: 'TransactionCurrencyId', crm_key: 'transactioncurrencyid'
 

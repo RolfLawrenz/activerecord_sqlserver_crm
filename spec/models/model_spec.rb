@@ -21,6 +21,7 @@ REQUIRED_FIELD_VALUES = {
     Crm::Invoice => {"contact" => Crm::Contact.last, "Name" => "Inv1", "InvoiceNumber" => "InvNum1", "price_list" => Crm::PriceList.last},
     Crm::InvoiceProduct => {"invoice" => Crm::Invoice.last, "product" => Crm::Product.last, "Quantity" => BigDecimal.new("1.23"), "uom" => Crm::Uom.last},
     Crm::Note => {"Subject" => "Note1"},
+    Crm::Opportunity => {"campaign" => Crm::Campaign.last},
     Crm::PriceList => {"Name" => "PriceList1", "currency" => Crm::Currency.last},
     Crm::PriceListItem => {"price_list" => Crm::PriceList.last, "product" => Crm::Product.last, "Amount" => BigDecimal.new("3.45"), "uom" => Crm::Uom.last},
     Crm::Product => {"Name" => "Product#{Random.rand(10000)}", "QuantityDecimal" => BigDecimal.new("5.31"), "ProductNumber" => "prod#{Random.rand(10000)}", "default_uom" => Crm::Uom.last, "default_uom_schedule" => Crm::UomSchedule.last},
@@ -39,6 +40,7 @@ UPDATE_FIELD_VALUES = {
     Crm::Invoice => {"Name" => "Test"},
     Crm::InvoiceProduct => {"Quantity" => BigDecimal.new("2.34")},
     Crm::Note => {"Subject" => "Test"},
+    Crm::Opportunity => {"Name" => "Test"},
     Crm::PriceList => {"Name" => "Test"},
     Crm::PriceListItem => {"Amount" => BigDecimal.new("6.29")},
     Crm::Product => {"Name" => "Test"},
@@ -133,7 +135,7 @@ describe Crm do
       puts "Write, Update, Delete for:"
       model_classes.each do |model|
         puts "  #{model}#{MODELS_TO_SKIP_WRITE_TESTS.include?(model) ? ' - SKIPPED' : ''}"
-        # next unless model.to_s == "Crm::User"
+        # next unless model.to_s == "Crm::Opportunity"
         next if MODELS_TO_SKIP_WRITE_TESTS.include?(model)
 
         count = model.count
