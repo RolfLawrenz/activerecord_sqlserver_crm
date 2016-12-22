@@ -5,7 +5,7 @@ module Crm
 
     belongs_to :currency, foreign_key: 'TransactionCurrencyId', crm_key: 'transactioncurrencyid'
 
-    has_many :notes, foreign_key: 'ObjectId'
+    has_many :notes, foreign_key: 'ObjectId', class_name: "Crm::CampaignNote"
     has_many :campaign_responses, foreign_key: 'RegardingObjectId'
 
     validates :Name, presence: true

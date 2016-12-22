@@ -67,7 +67,9 @@ module ActiveRecordExtension
 
     def belongs_to_field(field)
       @belongs_to_fields ||= belongs_to_fields
-      @belongs_to_fields.select{|f| f.foreign_key == field}.first
+      matching_fields = @belongs_to_fields.select{|f| f.foreign_key == field}
+      raise "Multiple matching foreign_keys. Only unique foreign keys allowed [#{field}]" if matching_fields.count > 1
+      matching_fields.first
     end
 
     def belongs_to_field_by_name(name)
@@ -76,8 +78,7 @@ module ActiveRecordExtension
     end
 
     def belongs_to_fields
-      associations = reflect_on_all_associations
-      associations.select { |a| a.macro == :belongs_to }
+      reflect_on_all_associations(:belongs_to)
     end
 
     # If odata refers to table differently than table name when using associations, you can use this method

@@ -3,7 +3,7 @@ module Crm
     self.table_name = "Account"
     self.primary_key = "AccountId"
 
-    has_many :notes, foreign_key: 'ObjectId'
+    has_many :notes, foreign_key: 'ObjectId', class_name: "Crm::AccountNote"
     has_many :cases, foreign_key: 'AccountId'
 
     validates :Name, presence: true

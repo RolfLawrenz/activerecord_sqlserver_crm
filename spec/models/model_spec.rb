@@ -13,15 +13,21 @@ require 'rails_helper'
 
 REQUIRED_FIELD_VALUES = {
     Crm::Account => {"Name" => "Company"},
+    Crm::AccountNote => {"Subject" => "Note1"},
     Crm::Campaign => {"currency" => Crm::Currency.last, "Name" => "Campaign"},
+    Crm::CampaignNote => {"Subject" => "Note1"},
     Crm::CampaignResponse => {"Subject" => "John", "campaign" => Crm::Campaign.last},
+    Crm::CampaignResponseNote => {"Subject" => "Note1"},
     Crm::Case => {"Title" => "Case1", "contact" => Crm::Contact.last},
+    Crm::CaseNote => {"Subject" => "Note1"},
     Crm::Contact => {"FirstName" => "John", "LastName" => "Smith"},
+    Crm::ContactNote => {"Subject" => "Note1"},
     Crm::Currency => {"CurrencyName" => "Elvish", "CurrencyPrecision" => 2, "CurrencySymbol" => "Z", "ExchangeRate" => BigDecimal.new("1.23"), "ISOCurrencyCode" => "GBP"},
     Crm::Invoice => {"contact" => Crm::Contact.last, "Name" => "Inv1", "InvoiceNumber" => "InvNum1", "price_list" => Crm::PriceList.last},
+    Crm::InvoiceNote => {"Subject" => "Note1"},
     Crm::InvoiceProduct => {"invoice" => Crm::Invoice.last, "product" => Crm::Product.last, "Quantity" => BigDecimal.new("1.23"), "uom" => Crm::Uom.last},
-    Crm::Note => {"Subject" => "Note1"},
     Crm::Opportunity => {"campaign" => Crm::Campaign.last},
+    Crm::OpportunityNote => {"Subject" => "Note1"},
     Crm::PriceList => {"Name" => "PriceList1", "currency" => Crm::Currency.last},
     Crm::PriceListItem => {"price_list" => Crm::PriceList.last, "product" => Crm::Product.last, "Amount" => BigDecimal.new("3.45"), "uom" => Crm::Uom.last},
     Crm::Product => {"Name" => "Product#{Random.rand(10000)}", "QuantityDecimal" => BigDecimal.new("5.31"), "ProductNumber" => "prod#{Random.rand(10000)}", "default_uom" => Crm::Uom.last, "default_uom_schedule" => Crm::UomSchedule.last},
@@ -32,15 +38,21 @@ REQUIRED_FIELD_VALUES = {
 
 UPDATE_FIELD_VALUES = {
     Crm::Account => {"Name" => "Test"},
+    Crm::AccountNote => {"Subject" => "Test"},
     Crm::Campaign => {"Name" => "Test"},
+    Crm::CampaignNote => {"Subject" => "Test"},
     Crm::CampaignResponse => {"Subject" => "Peter"},
+    Crm::CampaignResponseNote => {"Subject" => "Test"},
     Crm::Case => {"Title" => "Test"},
+    Crm::CaseNote => {"Subject" => "Test"},
     Crm::Contact => {"FirstName" => "Joe"},
+    Crm::ContactNote => {"Subject" => "Test"},
     Crm::Currency => {"CurrencyName" => "Test"},
     Crm::Invoice => {"Name" => "Test"},
+    Crm::InvoiceNote => {"Subject" => "Test"},
     Crm::InvoiceProduct => {"Quantity" => BigDecimal.new("2.34")},
-    Crm::Note => {"Subject" => "Test"},
     Crm::Opportunity => {"Name" => "Test"},
+    Crm::OpportunityNote => {"Subject" => "Test"},
     Crm::PriceList => {"Name" => "Test"},
     Crm::PriceListItem => {"Amount" => BigDecimal.new("6.29")},
     Crm::Product => {"Name" => "Test"},
@@ -51,6 +63,7 @@ UPDATE_FIELD_VALUES = {
 
 MODELS_TO_SKIP_WRITE_TESTS = [
     Crm::Case,
+    Crm::Note,
     Crm::Currency,
     Crm::UomSchedule,
     Crm::User

@@ -10,7 +10,7 @@ module Crm
     belongs_to :parent_contact, foreign_key: 'ParentContactId', crm_key: 'parentcontactid', class_name: 'Crm::Contact'
 
     has_many :invoices, foreign_key: 'OpportunityId'
-    has_many :notes, foreign_key: 'ObjectId'
+    has_many :notes, foreign_key: 'ObjectId', class_name: "Crm::OpportunityNote"
 
   end
 end

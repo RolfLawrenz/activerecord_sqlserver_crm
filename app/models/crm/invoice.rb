@@ -10,7 +10,7 @@ module Crm
     belongs_to :currency, foreign_key: 'TransactionCurrencyId', crm_key: 'transactioncurrencyid'
 
     has_many :invoice_products, foreign_key: 'InvoiceId'
-    has_many :notes, foreign_key: 'ObjectId'
+    has_many :notes, foreign_key: 'ObjectId', class_name: "Crm::InvoiceNote"
 
     validates :Name, presence: true
     validates :price_list, presence: true

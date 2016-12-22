@@ -6,7 +6,7 @@ module Crm
     belongs_to :contact, foreign_key: 'ContactId', crm_key: 'customerid_contact'
     belongs_to :account, foreign_key: 'AccountId', crm_key: 'customerid_account'
 
-    has_many :notes, foreign_key: 'ObjectId'
+    has_many :notes, foreign_key: 'ObjectId', class_name: "Crm::CaseNote"
 
     validates :Title, presence: true
     validate :contact_xor_account
