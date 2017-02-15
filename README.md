@@ -86,7 +86,7 @@ invoices = contact.invoices
 ```
 
 When adding your own models, make sure you add these associations using the typical activerecord **has_many**, **belongs_to** methods. There is an extra field included in the **belongs_to** method called **crm_key**. The **crm_key** is used only for OData calls. Sometimes the foreign_key stored in the table is different than the whats used in OData. 
-To find the foreign_key field, look in the database table. To find the crm_key, look in the OData metadata Entity. It is case sensitive. The crm_key will look something like this in the metadata (customerid_contact):
+To find the foreign_key field, look in the database table. To find the crm_key, look in the OData metadata Entity. It is case sensitive. The crm_key will look something like this in the metadata file (customerid_contact):
  
 ```xml
 <EntityType Name="invoice" BaseType="mscrm.crmbaseentity">
@@ -97,6 +97,7 @@ To find the foreign_key field, look in the database table. To find the crm_key, 
 
 ```
  
+The **Name="customerid_contact"** in the example above is used as the **crm_key** in your table definitions.
 
 ### Adding a new Field
 There is nothing required in the library for a new field. Just start using it in your app. Fields are case sensitive.
@@ -197,58 +198,97 @@ Crm::Account.testb
 
 Now in your company projects you include this company gem (activerecord_sqlserver_mycompany) in your Gemfile.
 
+### One to Many relationships
+
+Here is an example of a one to many relationship *(only relevant parts shown)*
+
+The One to Many table (Contact has many Opportunities)
+
+```ruby
+module Crm
+  class Opportunity < ActiveRecord::Base
+    self.table_name = "Opportunity"
+    self.primary_key = "OpportunityId"
+
+    belongs_to :contact, foreign_key: 'ContactId', crm_key: 'customerid_contact'
+  end
+end
+
+module Crm
+  class Contact < ActiveRecord::Base
+    self.table_name = "Contact"
+    self.primary_key = "ContactId"
+
+    has_many :opportunities, foreign_key: 'ContactId'
+  end
+end
+```
+
 ### Many to Many relationships
 
-Here is an example of a many to many relationship
+Here is an example of a many to many relationship *(only relevant parts shown)*
 
-The Many to Many table (WidgetThing)
+The Many to Many Tables (Opportunities and Users)
 
 ```ruby
 module Crm
-  class WidgetThing < ActiveRecord::Base
-    self.table_name = "new_WidgetThing"
-    self.primary_key = "new_WidgetThingId"
+  class Opportunity < ActiveRecord::Base
+    self.table_name = "Opportunity"
+    self.primary_key = "OpportunityId"
 
-    belongs_to :widget, foreign_key: 'new_widgetId', crm_key: 'new_widgetid'
-    belongs_to :thing, foreign_key: 'new_thingId', crm_key: 'new_thingid'
+    has_many :opportunity_users, foreign_key: 'opportunityid'
+    has_many :users, through: :opportunity_users, foreign_key: "opportunityid"
+  end
+end
+
+module Crm
+  class User < ActiveRecord::Base
+    self.table_name = "SystemUser"
+    self.primary_key = "SystemUserId"
+
+    has_many :opportunity_users, foreign_key: 'systemuserid'
+    has_many :opportunities, through: :opportunity_users, foreign_key: "systemuserid"
+  end
+end
+
+module Crm
+  class OpportunityUser < ActiveRecord::Base
+    self.table_name = "new_opportunity_systemuser"
+    self.primary_key = "new_opportunity_systemuserId"
+    self.many_to_many_associated_tables = [Crm::User, Crm::Opportunity]
+    self.many_to_many_use_old_api = true
+
+    belongs_to :opportunity, foreign_key: 'opportunityid', crm_key: 'new_opportunityid'
+    belongs_to :user, foreign_key: 'systemuserid', crm_key: 'new_systemuserid'
+
+    validates :opportunity, presence: true
+    validates :user, presence: true
   end
 end
 ```
 
-The One to Many Tables
+The **self.many_to_many_use_old_api = true** I have found only a problem when working with the **SystemUser** table like
+ above. For all other tables you should be able to use the new REST api, so that line can be omitted.
+ 
+### Associate a Many to Many
+You must create the many to many association like this:
 
-```ruby
-module Crm
-  class Widget < ActiveRecord::Base
-    self.table_name = "new_Widget"
-    self.primary_key = "new_WidgetId"
-
-    has_many :widget_things, foreign_key: 'new_widgetId'
-    has_many :things, through: :widget_things, foreign_key: "new_widgetId"
-  end
-end
-
-module Crm
-  class Thing < ActiveRecord::Base
-    self.table_name = "new_Thing"
-    self.primary_key = "new_ThingId"
-
-    has_many :widget_things, foreign_key: 'new_thingId'
-    has_many :widgets, through: :widget_things, foreign_key: "new_thingId"
-  end
-end
-
-module Crm
-  class WidgetThing < ActiveRecord::Base
-    self.table_name = "new_WidgetThing"
-    self.primary_key = "new_WidgetThingId"
-    self.many_to_many_associated_tables = [Crm::Widget, Crm::Thing]
-
-    belongs_to :widget, foreign_key: 'new_widgetId', crm_key: 'new_widgetid'
-    belongs_to :thing, foreign_key: 'new_thingId', crm_key: 'new_thingid'
-  end
-end
 ```
+opp = Crm::Opportunity.where(OpportunityId: '0000000-0000-0000-0000-000000000001').last
+user = Crm::User.where(SystemUserId: '0000000-0000-0000-0000-000000000002').last
+ou = Crm::OpportunityUser.create!(opportunity: opp, user: user)
+```
+
+### Disassociate a Many to Many
+You must delete the many to many association like this:
+
+```
+opp = Crm::Opportunity.where(OpportunityId: '0000000-0000-0000-0000-000000000001').last
+user = Crm::User.where(SystemUserId: '0000000-0000-0000-0000-000000000002').last
+ou = Crm::OpportunityUser.where(opportunity: opp, user: user)
+ou.destroy!
+```
+ 
 
 ## OData differences
 In some rare cases Microsoft CRM names fields differently in OData than in database. If you this occurs for you, you can use the **odata_field** method. For example

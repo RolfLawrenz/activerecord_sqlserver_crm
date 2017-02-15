@@ -41,7 +41,7 @@ module ActiveRecordExtension
     if has_errors
       raise_record_invalid
     else
-      reload
+      reload unless id.nil?
     end
     !has_errors
   end
@@ -99,6 +99,28 @@ module ActiveRecordExtension
 
     def many_to_many_associated_tables=(value)
       @many_to_many_associated_tables = value
+    end
+
+    # Binding name is found in the metadata xml file. It will look something like (system users - opportunities):
+    # <EntitySet Name="systemusers" EntityType="Microsoft.Dynamics.CRM.systemuser">
+    #   <NavigationPropertyBinding Path="new_systemuser_opportunity" Target="opportunities"/>
+    # Its different for both entities, so this is a hash of tablename to binding name
+    def many_to_many_binding_name
+      @many_to_many_binding_name
+    end
+
+    def many_to_many_binding_name=(value)
+      @many_to_many_binding_name = value
+    end
+
+    # For some associations the new api does not work, notably the systemuser. But the old api does work.
+    # Hopefully in future releases Microsoft will fix the new apis.
+    def many_to_many_use_old_api
+      @many_to_many_use_old_api ||= false
+    end
+
+    def many_to_many_use_old_api=(value)
+      @many_to_many_use_old_api = value
     end
 
     # In some cases the odata field name is different than the database field name. This method is used for this mapping

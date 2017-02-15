@@ -13,6 +13,10 @@ module OData
       OdataConfig.odata_config[Rails.env]['data_url']
     end
 
+    def old_base_url
+      OdataConfig.odata_config[Rails.env]['old_data_url']
+    end
+
     def check_response_errors(response)
       # Check for Http error
       if response.code.to_i >= 400
@@ -37,8 +41,16 @@ module OData
       @ar.class.many_to_many_associated_tables.present?
     end
 
+    def many_to_many_use_old_api?
+      @ar.class.many_to_many_use_old_api
+    end
+
+    def many_to_many_binding_name
+      @ar.class.many_to_many_binding_name || many_to_many_table_name
+    end
+
     def many_to_many_entity_name(index)
-      @ar.class.many_to_many_associated_tables[index].odata_table_reference || table_pluralize(@ar.class.many_to_many_associated_tables[index].table_name).downcase
+      @ar.class.many_to_many_associated_tables[index].odata_table_reference || table_pluralize(many_to_many_associated_table_name(index)).downcase
     end
 
     def many_to_many_class_name(index)
@@ -54,7 +66,11 @@ module OData
     end
 
     def many_to_many_table_name
-      @ar.class.odata_table_reference || @ar.class.table_name.downcase
+      @ar.class.odata_table_reference || @ar.class.table_name
+    end
+
+    def many_to_many_associated_table_name(index)
+      @ar.class.many_to_many_associated_tables[index].table_name
     end
 
     def operation_body
