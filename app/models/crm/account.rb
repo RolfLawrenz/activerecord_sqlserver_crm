@@ -1,5 +1,5 @@
 module Crm
-  class Account < ActiveRecord::Base
+  class Account < ::ApplicationRecord
     self.table_name = "Account"
     self.primary_key = "AccountId"
 

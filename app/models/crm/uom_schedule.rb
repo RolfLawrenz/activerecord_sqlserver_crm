@@ -1,5 +1,5 @@
 module Crm
-  class UomSchedule < ActiveRecord::Base
+  class UomSchedule < ::ApplicationRecord
     self.table_name = "UoMSchedule"
     self.primary_key = "UoMScheduleId"
 

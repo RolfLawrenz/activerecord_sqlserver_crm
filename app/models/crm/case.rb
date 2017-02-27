@@ -1,5 +1,5 @@
 module Crm
-  class Case < ActiveRecord::Base
+  class Case < ::ApplicationRecord
     self.table_name = "Incident"
     self.primary_key = "IncidentId"
 

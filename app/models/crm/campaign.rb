@@ -1,5 +1,5 @@
 module Crm
-  class Campaign < ActiveRecord::Base
+  class Campaign < ::ApplicationRecord
     self.table_name = "Campaign"
     self.primary_key = "CampaignId"
 

@@ -1,5 +1,5 @@
 module Crm
-  class Contact < ActiveRecord::Base
+  class Contact < ::ApplicationRecord
     self.table_name = "Contact"
     self.primary_key = "ContactId"
 

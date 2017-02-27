@@ -1,5 +1,5 @@
 module Crm
-  class Product < ActiveRecord::Base
+  class Product < ::ApplicationRecord
     self.table_name = "Product"
     self.primary_key = "ProductId"
 

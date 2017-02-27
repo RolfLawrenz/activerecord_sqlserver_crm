@@ -1,5 +1,5 @@
 module Crm
-  class Uom < ActiveRecord::Base
+  class Uom < ::ApplicationRecord
     self.table_name = "UoM"
     self.primary_key = "UoMId"
 

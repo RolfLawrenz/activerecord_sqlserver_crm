@@ -1,5 +1,5 @@
 module Crm
-  class PriceList < ActiveRecord::Base
+  class PriceList < ::ApplicationRecord
     self.table_name = "PriceLevel"
     self.primary_key = "PriceLevelId"
 

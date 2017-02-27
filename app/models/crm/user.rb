@@ -1,5 +1,5 @@
 module Crm
-  class User < ActiveRecord::Base
+  class User < ::ApplicationRecord
     self.table_name = "SystemUser"
     self.primary_key = "SystemUserId"
 

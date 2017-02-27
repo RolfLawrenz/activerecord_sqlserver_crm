@@ -1,5 +1,5 @@
 module Crm
-  class Invoice < ActiveRecord::Base
+  class Invoice < ::ApplicationRecord
     self.table_name = "Invoice"
     self.primary_key = "InvoiceId"
 

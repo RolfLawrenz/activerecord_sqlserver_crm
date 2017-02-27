@@ -21,7 +21,7 @@ module ActiveRecordExtension
     end
     has_errors = errors.present?
     if has_errors
-      raise_record_not_destroyed
+      _raise_record_not_destroyed
     end
     !has_errors
   end

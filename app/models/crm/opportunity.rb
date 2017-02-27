@@ -1,5 +1,5 @@
 module Crm
-  class Opportunity < ActiveRecord::Base
+  class Opportunity < ::ApplicationRecord
     self.table_name = "Opportunity"
     self.primary_key = "OpportunityId"
 

@@ -2,7 +2,7 @@
 # To get around this issue we create a Note type for each Entity type. Each EntityNote contains only a single
 # entry for the ObjectId.
 module Crm
-  class Note < ActiveRecord::Base
+  class Note < ::ApplicationRecord
     self.table_name = "Annotation"
     self.primary_key = "AnnotationId"
 

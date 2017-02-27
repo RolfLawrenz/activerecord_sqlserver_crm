@@ -74,6 +74,7 @@ def model_classes
       begin
         models = []
         Dir["./app/models/**/*.rb"].sort.each do |file|
+          next if File.basename(file, ".*") == "application_record"
           models << "Crm::#{File.basename(file, ".*").gsub('_ext','').camelize}".constantize
         end
         models
