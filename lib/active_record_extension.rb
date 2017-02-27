@@ -142,13 +142,9 @@ unless OdataConfig.odata_config[Rails.env]['odata_enabled'] == false
   ActiveRecord::Base.send(:include, ActiveRecordExtension)
 
   # Extend belongs_to for crm_key field
-  module BelongsToActiveRecordExtension
-    def valid_options
-      super + [:crm_key]
-    end
-  end
-
   class ActiveRecord::Associations::Builder::BelongsTo
-    include ::BelongsToActiveRecordExtension
+    def self.valid_options(options)
+      super + [:polymorphic, :touch, :counter_cache, :optional, :crm_key]
+    end
   end
 end

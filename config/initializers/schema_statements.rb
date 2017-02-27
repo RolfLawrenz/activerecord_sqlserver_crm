@@ -7,7 +7,7 @@ module ActiveRecord
 
         def views_real_column_name(table_name, column_name)
           view_definition = Rails.cache.fetch("sqlserver_table_view_info_#{table_name}", expires_in: SCHEMA_EXPIRES_IN) do
-            schema_cache.view_information(table_name)[:VIEW_DEFINITION]
+            view_information(table_name)[:VIEW_DEFINITION]
           end
           return column_name unless view_definition
           # match_data = view_definition.match(/([\w-]*)\s+as\s+#{column_name}/im)
@@ -24,8 +24,8 @@ module ActiveRecord
                            SQLServer::Utils.extract_identifiers(table_name)
                          end
             database    = identifier.fully_qualified_database_quoted
-            view_exists = schema_cache.view_exists?(table_name)
-            view_tblnm  = table_name_or_views_table_name(table_name) if view_exists
+            view_exists = view_exists?(table_name)
+            view_tblnm  = view_table_name(table_name) if view_exists
             sql = %{
               SELECT DISTINCT
               #{lowercase_schema_reflection_sql('columns.TABLE_NAME')} AS table_name,
@@ -35,7 +35,7 @@ module ActiveRecord
               columns.NUMERIC_SCALE AS numeric_scale,
               columns.NUMERIC_PRECISION AS numeric_precision,
               columns.DATETIME_PRECISION AS datetime_precision,
-              columns.COLLATION_NAME AS collation,
+              columns.COLLATION_NAME AS [collation],
               columns.ordinal_position,
               CASE
                 WHEN columns.DATA_TYPE IN ('nchar','nvarchar','char','varchar') THEN columns.CHARACTER_MAXIMUM_LENGTH
@@ -53,6 +53,7 @@ module ActiveRecord
               FROM #{database}.INFORMATION_SCHEMA.COLUMNS columns
               LEFT OUTER JOIN #{database}.INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TC
                 ON TC.TABLE_NAME = columns.TABLE_NAME
+                AND TC.TABLE_SCHEMA = columns.TABLE_SCHEMA
                 AND TC.CONSTRAINT_TYPE = N'PRIMARY KEY'
               LEFT OUTER JOIN #{database}.INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KCU
                 ON KCU.COLUMN_NAME = columns.COLUMN_NAME
@@ -70,12 +71,14 @@ module ActiveRecord
               INNER JOIN #{database}.sys.columns AS c
                 ON o.object_id = c.object_id
                 AND c.name = columns.COLUMN_NAME
-              WHERE columns.TABLE_NAME = @0
-                AND columns.TABLE_SCHEMA = #{identifier.schema.blank? ? 'schema_name()' : '@1'}
+              WHERE columns.TABLE_NAME = #{prepared_statements ? '@0' : quote(identifier.object)}
+                AND columns.TABLE_SCHEMA = #{identifier.schema.blank? ? 'schema_name()' : (prepared_statements ? '@1' : quote(identifier.schema))}
               ORDER BY columns.ordinal_position
-            }.gsub(/[ \t\r\n]+/, ' ')
-            binds = [[info_schema_table_name_column, identifier.object]]
-            binds << [info_schema_table_schema_column, identifier.schema] unless identifier.schema.blank?
+            }.gsub(/[ \t\r\n]+/, ' ').strip
+            binds = []
+            nv128 = SQLServer::Type::UnicodeVarchar.new limit: 128
+            binds << Relation::QueryAttribute.new('TABLE_NAME', identifier.object, nv128)
+            binds << Relation::QueryAttribute.new('TABLE_SCHEMA', identifier.schema, nv128) unless identifier.schema.blank?
             results = sp_executesql(sql, 'SCHEMA', binds)
             ret = results.map do |ci|
               ci = ci.symbolize_keys
