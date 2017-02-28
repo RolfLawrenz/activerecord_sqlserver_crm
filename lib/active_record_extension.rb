@@ -39,7 +39,7 @@ module ActiveRecordExtension
     end
     has_errors = errors.present?
     if has_errors
-      raise_record_invalid
+      raise_validation_error
     else
       reload unless id.nil?
     end
