@@ -22,6 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency "tiny_tds", '~> 1.1', '>= 1.1.0'
   s.add_dependency 'typhoeus', '~> 1.1', '>= 1.1.2'
 
-  s.add_development_dependency 'rspec-rails', '~> 3.5.2'
+  s.add_development_dependency 'rspec-rails', '~> 3.5', '>= 3.5.2'
   s.add_development_dependency 'byebug', '~> 9.0', '>= 9.0.6'
 end
