@@ -121,7 +121,7 @@ module OData
 
     def send_odata
       @ar.run_callbacks operation_callback_name do
-        if Rails.env.development? || Rails.env.test?
+        if Rails.env.development? || Rails.env.test? || Rails.env.staging?
           Rails.logger.debug "SEND_ODATA URL: #{operation_url}"
           Rails.logger.debug "SEND_ODATA METHOD: #{operation_method}"
           Rails.logger.debug "SEND_ODATA BODY: #{operation_body}"

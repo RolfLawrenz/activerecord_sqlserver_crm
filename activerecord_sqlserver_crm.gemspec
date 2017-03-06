@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_runtime_dependency 'rails', '~> 5.0', '>= 5.0.1'
+  s.add_runtime_dependency 'rails', '~> 5.0', '>= 5.0.2'
   s.add_runtime_dependency 'activerecord-sqlserver-adapter', '~> 5.0', '>= 5.0.5'
   s.add_dependency "tiny_tds", '~> 1.1', '>= 1.1.0'
   s.add_dependency 'typhoeus', '~> 1.1', '>= 1.1.2'
