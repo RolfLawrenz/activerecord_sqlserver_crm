@@ -8,4 +8,8 @@ gem build activerecord_sqlserver_crm.gemspec
 
 gem push activerecord_sqlserver_crm-0.0.1.gem
 
+== Create a Tag
 
+Must create a tag otherwise release will not be seen on github
+
+git tag -a v5.1.0 -m "Upgraded to Rails 5.1"
