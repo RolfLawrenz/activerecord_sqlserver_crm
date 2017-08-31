@@ -41,7 +41,10 @@ module ActiveRecordExtension
     if has_errors
       raise_validation_error
     else
-      reload unless id.nil?
+      unless id.nil?
+        @new_record = false
+        clear_changes_information
+      end
     end
     !has_errors
   end
