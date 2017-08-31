@@ -8,4 +8,8 @@ gem build activerecord_sqlserver_crm.gemspec
 
 gem push activerecord_sqlserver_crm-0.0.1.gem
 
+== You must also add tag for it to be published
+
+git tag -a v5.0.5 -m "Remove reload on a save"
+git push origin v5.0
 
