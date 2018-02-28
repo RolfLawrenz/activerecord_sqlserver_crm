@@ -96,6 +96,19 @@ end
 
 describe Crm do
 
+  context 'Arel changes' do
+    it 'should not include ORDER' do
+      expect(Crm::Contact.where(ContactId: "66666666-7777-8888-9999-000D3A305C09").to_sql).not_to include("ORDER")
+    end
+
+    it 'should not include ORDER' do
+      expect(Crm::Contact.where(ContactId: "66666666-7777-8888-9999-000D3A305C09").order(:FirstName).to_sql).to include("ORDER")
+    end
+
+    # TODO Not sure how to test sql for a 'find'. So need to use a puts in sqlserver.rb file
+
+  end
+
   context 'Read' do
     it 'should give a count' do
       puts "Count for:"
