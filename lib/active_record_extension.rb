@@ -41,7 +41,7 @@ module ActiveRecordExtension
     if has_errors
       raise_validation_error
     else
-      reload unless id.nil?
+      reload_after_odata unless id.nil?
     end
     !has_errors
   end
@@ -52,6 +52,45 @@ module ActiveRecordExtension
     end
     save
   end
+
+  # Created a method here because could not override ActiveRecord Persistance module because 3
+  # other modules override the reload method.
+  # I'm not really that thrilled with what I did here with this method for reload.
+  # Basically got parts from various ActiveRecord modules and combined them in here. I followed
+  # the reload through byebug to see how "reload" was being called
+  def reload_after_odata(options = nil)
+    # aggregations.rb
+    clear_aggregation_cache
+
+    # autosave_association.rb
+    @marked_for_destruction = false
+    @destroyed_by_association = nil
+
+    # associations.rb
+    clear_association_cache
+
+    # persistence.rb (only 1 line of code chaned in here)
+    self.class.connection.clear_query_cache
+
+    fresh_object =
+        if options && options[:lock]
+          self.class.unscoped { self.class.lock(options[:lock]).find(id) }
+        else
+          # Remove unscope here
+          self.class.find(id)
+        end
+
+    @attributes = fresh_object.instance_variable_get("@attributes")
+    @new_record = false
+
+    # attribute_methods/dirty.rb
+    @previous_mutation_tracker = nil
+    clear_mutation_trackers
+    @changed_attributes = ActiveSupport::HashWithIndifferentAccess.new
+
+    self
+  end
+
 
   def update_attribute(name, value)
     write_attribute(name,value)
