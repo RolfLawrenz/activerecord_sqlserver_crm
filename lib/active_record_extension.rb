@@ -58,6 +58,23 @@ module ActiveRecordExtension
     save
   end
 
+  # If using default_scope to restrict fields returned (with select)
+  # Change reload so it still uses the default scope rather than unscoped
+  def reload(options = nil)
+    self.class.connection.clear_query_cache
+
+    fresh_object =
+        if options && options[:lock]
+          self.class.unscoped { self.class.lock(options[:lock]).find(id) }
+        else
+          self.class.find(id)
+        end
+
+    @attributes = fresh_object.instance_variable_get("@attributes")
+    @new_record = false
+    self
+  end
+
   # add your static(class) methods here
   module ClassMethods
     def belongs_to_field?(field)
